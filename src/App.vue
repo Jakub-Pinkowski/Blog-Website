@@ -1,14 +1,16 @@
 <template>
-    <TheHeader class="desktop" />
-    <TheNavigation class="mobile" />
-    <main>
-        <router-view v-slot="{ Component }">
-            <transition name="slide-blur" mode="out-in">
-                <component :is="Component" />
-            </transition>
-        </router-view>
-    </main>
-    <TheFooter />
+    <div class="body">
+        <TheHeader class="desktop" />
+        <TheNavigation class="mobile" />
+        <main>
+            <router-view v-slot="{ Component }">
+                <transition name="slide-blur" mode="out-in">
+                    <component :is="Component" />
+                </transition>
+            </router-view>
+        </main>
+        <TheFooter />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +45,7 @@ import TheNavigation from '@/components/TheNavigation.vue'
 
 /* Global styles */
 
-body {
+.body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
