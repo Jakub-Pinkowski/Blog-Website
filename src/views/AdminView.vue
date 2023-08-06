@@ -23,13 +23,16 @@
                             ></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="photo">Photo URL:</label>
-                            <input
-                                v-model="newPost.image"
-                                type="text"
-                                id="photo"
-                                placeholder="Enter photo URL"
-                            />
+                            <div class="form-group">
+                                <label>Drag and drop your photo here:</label>
+                                <div
+                                    class="drag-drop-area"
+                                    @drop.prevent="dropHandler"
+                                    @dragover.prevent
+                                >
+                                    Drop your file here!
+                                </div>
+                            </div>
                         </div>
                         <button type="submit">Add Post</button>
                     </form>
@@ -58,6 +61,13 @@
 import { ref, onMounted, computed } from 'vue'
 import { usePostStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
+import {
+    getStorage,
+    ref as storageRef,
+    uploadBytesResumable,
+    getDownloadURL,
+} from 'firebase/storage'
+import Draggable from 'vuedraggable'
 
 const postStore = usePostStore()
 const authStore = useAuthStore()
@@ -100,6 +110,55 @@ const addNewPost = async () => {
         alert('Please fill out all fields before submitting.')
     }
 }
+
+// Upload image
+const draggedFile = ref<File | null>(null)
+const storage = getStorage()
+const uploadImage = async () => {
+    if (!draggedFile.value) return
+    const filePath = `posts/${new Date().toISOString()}-${
+        draggedFile.value.name
+    }`
+    const storageReference = storageRef(storage, filePath)
+
+    const uploadTask = uploadBytesResumable(storageReference, draggedFile.value)
+
+    // Update progress, error, and complete handlers as necessary
+    uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+            const progress =
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            console.log('Upload is ' + progress + '% done')
+        },
+        (error) => {
+            console.error('Upload failed:', error)
+        },
+        async () => {
+            newPost.value.image = await getDownloadURL(storageReference)
+        }
+    )
+}
+
+const dropHandler = (event) => {
+    if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
+        draggedFile.value = event.dataTransfer.items[0].getAsFile()
+        uploadImage()
+        event.dataTransfer.clearData()
+    }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.drag-drop-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.drag-drop-area:hover {
+    background: #f7f7f7;
+}
+</style>

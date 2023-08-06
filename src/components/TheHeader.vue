@@ -23,9 +23,6 @@
 <script setup lang="ts">
 import { useViewStore } from '@/stores/views'
 
-import plane_icon from '../assets/icons/plane.svg'
-import plane_color_icon from '../assets/icons/plane-color.png'
-
 const viewStore = useViewStore()
 const views = viewStore.views
 </script>
