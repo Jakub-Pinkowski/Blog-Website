@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-md">
         <div class="container-fluid">
             <router-link class="nav-link" to="/">
-                <img :src="plane_color_icon" alt="plane icon" />
+                <TheLogo />
             </router-link>
             <div class="collapse navbar-collapse navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0">
@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { useViewStore } from '@/stores/views'
 
-import plane_icon from '../assets/icons/plane.png'
+import plane_icon from '../assets/icons/plane.svg'
 import plane_color_icon from '../assets/icons/plane-color.png'
 
 const viewStore = useViewStore()
@@ -39,6 +39,14 @@ const views = viewStore.views
 
 .nav-link:hover {
     color: var(--accent-color);
+}
+
+.nav-link svg {
+    fill: var(--dark-accent); // This is the default color
+}
+
+.nav-link:hover svg {
+    fill: var(--accent-color);
 }
 
 .navbarSupportedContent {
