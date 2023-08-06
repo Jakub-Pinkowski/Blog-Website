@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="view">
+        <ViewDescription>Admin</ViewDescription>
         <!-- When logged in -->
         <div v-if="authStore.user">
             <AddPostForm />
@@ -27,4 +28,5 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+</style>

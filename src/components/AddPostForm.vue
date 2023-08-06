@@ -1,27 +1,26 @@
 <template>
-    <div class="add-posts">
-        <div class="add-posts">
-            <form @submit.prevent="addNewPost">
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input
-                        v-model="newPost.title"
-                        type="text"
-                        id="title"
-                        placeholder="Enter post title"
-                    />
-                </div>
-                <div class="form-group">
-                    <label for="content">Content:</label>
-                    <textarea
-                        v-model="newPost.content"
-                        id="content"
-                        placeholder="Enter post content"
-                    ></textarea>
-                </div>
-                <div class="form-group">
+    <div class="admin_panel">
+        <div class="add_posts">
+            <div class="add_posts">
+                <form @submit.prevent="addNewPost">
                     <div class="form-group">
-                        <label>Drag and drop your photo here:</label>
+                        <input
+                            v-model="newPost.title"
+                            type="text"
+                            id="title"
+                            placeholder="Title"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <textarea
+                            v-model="newPost.content"
+                            id="content"
+                            cols="150"
+                            rows="15"
+                            placeholder="Content"
+                        ></textarea>
+                    </div>
+                    <div class="form-group">
                         <div
                             class="drag-drop-area"
                             :class="{
@@ -35,16 +34,18 @@
                             <span v-if="isUploaded"
                                 >Uploaded successfully!</span
                             >
-                            <span v-else>Drop your file here!</span>
+                            <span v-else>Drop an image here</span>
                         </div>
                     </div>
-                </div>
-                <button type="submit">Add Post</button>
-            </form>
+                    <button class="btn btn-sm" type="submit">Add Post</button>
+                </form>
+            </div>
+            <div>
+                <button class="btn btn-sm logout" @click="authStore.logout">
+                    Logout
+                </button>
+            </div>
         </div>
-    </div>
-    <div>
-        <button @click="authStore.logout">Logout</button>
     </div>
 </template>
 
@@ -150,36 +151,85 @@ const addNewPost = async () => {
 </script>
 
 <style scoped lang="scss">
-.drag-drop-area {
+.admin_panel {
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    flex-direction: column;
+    width: 100%;
 
-    // Hover effect
-    &:hover {
-        background: #f7f7f7;
-        border-color: #aaa;
-        transform: scale(1.05); // Slight scaling for emphasis
-    }
+    form {
+        display: flex;
+        flex-direction: column;
 
-    // Dragging over the drop zone
-    &.drag-over {
-        background: #f0f0f0;
-        border-color: #666;
-        transform: scale(1.1); // Further emphasis during drag
-    }
+        input {
+            width: 50%;
+        }
 
-    // On successful upload
-    &.upload-success {
-        border-color: #4caf50;
-        background-color: #e8f5e9;
-        color: #4caf50;
-        font-weight: bold;
+        input,
+        textarea {
+            margin: 1rem 0;
+            padding: 0.5em;
+            border: 1px solid var(--dark-accent);
+            border-radius: 5px;
+        }
+
+        .drag-drop-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px dashed #ccc;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s, border-color 0.3s, transform 0.3s;
+
+            // Hover effect
+            &:hover {
+                background: #f7f7f7;
+                border-color: #aaa;
+                transform: scale(1.05); // Slight scaling for emphasis
+            }
+
+            // Dragging over the drop zone
+            &.drag-over {
+                background: #f0f0f0;
+                border-color: #666;
+                transform: scale(1.1); // Further emphasis during drag
+            }
+
+            // On successful upload
+            &.upload-success {
+                border-color: #4caf50;
+                background-color: #e8f5e9;
+                color: #4caf50;
+                font-weight: bold;
+            }
+        }
     }
+}
+
+button {
+    margin: 1rem 0;
+    width: 90px;
+    border: 1px solid var(--dark-accent);
+    color: var(--main-bg-color);
+    transition: background-color 0.5s ease;
+}
+
+button:hover {
+    border: 1px solid var(--dark-accent);
+    background-color: var(--light-accent);
+}
+
+.logout {
+    margin-top: 4rem;
+    transition: background-color 0.5s ease;
+}
+
+.logout:hover {
+    background-color: var(--accent-color);
+    color: var(--light-gray);
 }
 </style>
