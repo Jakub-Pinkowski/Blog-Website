@@ -1,50 +1,56 @@
 <template>
-    <!-- When logged in-->
-    <div v-if="authStore.user">
-        <div class="add-posts">
+    <div>
+        <!-- When logged in-->
+        <div v-if="authStore.user">
             <div class="add-posts">
-                <form @submit.prevent="addNewPost">
-                    <div class="form-group">
-                        <label for="title">Title:</label>
-                        <input
-                            v-model="newPost.title"
-                            type="text"
-                            id="title"
-                            placeholder="Enter post title"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="content">Content:</label>
-                        <textarea
-                            v-model="newPost.content"
-                            id="content"
-                            placeholder="Enter post content"
-                        ></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="photo">Photo URL:</label>
-                        <input
-                            v-model="newPost.image"
-                            type="text"
-                            id="photo"
-                            placeholder="Enter photo URL"
-                        />
-                    </div>
-                    <button type="submit">Add Post</button>
-                </form>
+                <div class="add-posts">
+                    <form @submit.prevent="addNewPost">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input
+                                v-model="newPost.title"
+                                type="text"
+                                id="title"
+                                placeholder="Enter post title"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="content">Content:</label>
+                            <textarea
+                                v-model="newPost.content"
+                                id="content"
+                                placeholder="Enter post content"
+                            ></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="photo">Photo URL:</label>
+                            <input
+                                v-model="newPost.image"
+                                type="text"
+                                id="photo"
+                                placeholder="Enter photo URL"
+                            />
+                        </div>
+                        <button type="submit">Add Post</button>
+                    </form>
+                </div>
+            </div>
+            <div>
+                <button @click="authStore.logout">Logout</button>
             </div>
         </div>
-        <div>
-            <button @click="authStore.logout">Logout</button>
+        <!-- When not logged in -->
+        <div v-else>
+            <form @submit.prevent="handleLogin">
+                <input v-model="email" placeholder="Email" />
+                <input
+                    type="password"
+                    v-model="password"
+                    placeholder="Password"
+                />
+                <button type="submit">Login</button>
+            </form>
         </div>
-    </div>
-    <!-- When not logged in -->
-    <div v-else>
-        <form @submit.prevent="handleLogin">
-            <input v-model="email" placeholder="Email" />
-            <input type="password" v-model="password" placeholder="Password" />
-            <button type="submit">Login</button>
-        </form>
     </div>
 </template>
 
