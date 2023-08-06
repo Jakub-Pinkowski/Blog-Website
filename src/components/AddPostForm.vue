@@ -18,6 +18,7 @@
                             theme="snow"
                             :options="editorOptions"
                             v-model="newPost.content"
+                            @text-change="updateContent"
                         />
                     </div>
                     <div class="form-group">
@@ -39,13 +40,7 @@
                             <span v-else>Drop an image here</span>
                         </div>
                     </div>
-                    <button
-                        class="btn btn-sm"
-                        type="submit"
-                        :disabled="isUploading || !isFormValid"
-                    >
-                        Add Post
-                    </button>
+                    <button class="btn btn-sm" type="submit">Add Post</button>
                 </form>
             </div>
             <div>
@@ -75,7 +70,9 @@ const postStore = usePostStore()
 const authStore = useAuthStore()
 
 const isFormValid = computed(() => {
-    return newPost.value.title.trim() !== ''
+    return (
+        newPost.value.title.trim() !== '' && newPost.value.content.trim() !== ''
+    )
 })
 
 // Quill editor options
@@ -98,8 +95,12 @@ const editorOptions = {
         ],
     },
 }
-// Drag and drop functionality
 
+const updateContent = (content) => {
+    newPost.value.content = content
+}
+
+// Drag and drop functionality
 const isUploading = computed(() => {
     return !!(
         newPost.value.title &&
@@ -181,12 +182,12 @@ const newPost = ref({
 const addNewPost = async () => {
     if (draggedFile.value) {
         try {
-            isProcessing.value = true // Set isProcessing to true when the file is dropped
+            isProcessing.value = true
             newPost.value.image = await uploadImage()
-            isProcessing.value = false // Set isProcessing to false after successful upload
+            isProcessing.value = false
         } catch (error) {
             alert('Failed to upload image: ' + error.message)
-            isProcessing.value = false // Set isProcessing to false on error
+            isProcessing.value = false
             return
         }
     }

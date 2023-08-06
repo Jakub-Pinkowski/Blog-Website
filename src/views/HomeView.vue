@@ -9,7 +9,7 @@
                 />
                 <div class="text">
                     <h1>{{ post.details.title }}</h1>
-                    <p>{{ post.details.content }}</p>
+                    <div v-html="post.details.content"></div>
                 </div>
             </div>
         </div>
