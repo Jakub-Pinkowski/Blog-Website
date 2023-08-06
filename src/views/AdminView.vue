@@ -58,6 +58,8 @@
 </template>
 
 <script setup lang="ts">
+// FIXME: Websocket connection is not working
+
 import { ref, onMounted, computed } from 'vue'
 import { usePostStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
@@ -90,30 +92,17 @@ const handleLogin = async () => {
     }
 }
 
-// Add new post
-const newPost = ref({
-    title: '',
-    content: '',
-    image: '',
-})
-
-const addNewPost = async () => {
-    if (newPost.value.title && newPost.value.content && newPost.value.image) {
-        console.log(newPost.value)
-        await postStore.addPost(newPost.value)
-        newPost.value = {
-            title: '',
-            content: '',
-            image: '',
-        }
-    } else {
-        alert('Please fill out all fields before submitting.')
-    }
-}
-
 // Upload image
 const draggedFile = ref<File | null>(null)
 const storage = getStorage()
+
+const dropHandler = (event) => {
+    if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
+        draggedFile.value = event.dataTransfer.items[0].getAsFile()
+        event.dataTransfer.clearData()
+    }
+}
+
 const uploadImage = async () => {
     if (!draggedFile.value) return
     const filePath = `posts/${new Date().toISOString()}-${
@@ -123,28 +112,54 @@ const uploadImage = async () => {
 
     const uploadTask = uploadBytesResumable(storageReference, draggedFile.value)
 
-    // Update progress, error, and complete handlers as necessary
-    uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-            const progress =
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log('Upload is ' + progress + '% done')
-        },
-        (error) => {
-            console.error('Upload failed:', error)
-        },
-        async () => {
-            newPost.value.image = await getDownloadURL(storageReference)
-        }
-    )
+    return new Promise((resolve, reject) => {
+        uploadTask.on(
+            'state_changed',
+            (snapshot) => {
+                const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                console.log('Upload is ' + progress + '% done')
+            },
+            (error) => {
+                console.error('Upload failed:', error)
+                reject(error)
+            },
+            async () => {
+                const imageUrl = await getDownloadURL(storageReference)
+                resolve(imageUrl)
+            }
+        )
+    })
 }
 
-const dropHandler = (event) => {
-    if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
-        draggedFile.value = event.dataTransfer.items[0].getAsFile()
-        uploadImage()
-        event.dataTransfer.clearData()
+// Add new post
+const newPost = ref({
+    title: '',
+    content: '',
+    image: '',
+})
+
+const addNewPost = async () => {
+    if (draggedFile.value) {
+        try {
+            newPost.value.image = await uploadImage()
+        } catch (error) {
+            alert('Failed to upload image: ' + error.message)
+            return
+        }
+    }
+
+    if (newPost.value.title && newPost.value.content && newPost.value.image) {
+        console.log(newPost.value)
+        await postStore.addPost(newPost.value)
+        newPost.value = {
+            title: '',
+            content: '',
+            image: '',
+        }
+        draggedFile.value = null // Clear the dragged file after successful post
+    } else {
+        alert('Please fill out all fields before submitting.')
     }
 }
 </script>
