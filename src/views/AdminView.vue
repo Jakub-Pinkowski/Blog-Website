@@ -1,4 +1,5 @@
 <template>
+    <!-- When logged in-->
     <div v-if="authStore.user">
         <div class="add-posts">
             <div class="add-posts">
@@ -33,7 +34,11 @@
                 </form>
             </div>
         </div>
+        <div>
+            <button @click="authStore.logout">Logout</button>
+        </div>
     </div>
+    <!-- When not logged in -->
     <div v-else>
         <form @submit.prevent="handleLogin">
             <input v-model="email" placeholder="Email" />
