@@ -1,9 +1,14 @@
 <template>
     <div>
         <form @submit.prevent="handleLogin">
-            <input v-model="email" placeholder="Email" />
-            <input type="password" v-model="password" placeholder="Password" />
-            <button type="submit">Login</button>
+            <input v-model="email" placeholder="Email" required />
+            <input
+                type="password"
+                v-model="password"
+                placeholder="Password"
+                required
+            />
+            <button class="btn btn-sm" type="submit">Login</button>
         </form>
     </div>
 </template>
@@ -28,4 +33,34 @@ const handleLogin = async () => {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+form {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+
+    input {
+        width: 20%;
+        margin: 1rem 0;
+        padding: 0.5em;
+        border: 1px solid var(--dark-accent);
+        border-radius: 5px;
+    }
+
+    button {
+        margin: 1rem 0;
+        width: 90px;
+        border: 1px solid var(--dark-accent);
+        color: var(--main-bg-color);
+        transition: background-color 0.5s ease;
+    }
+
+    button:hover {
+        border: 1px solid var(--dark-accent);
+        background-color: var(--light-accent);
+    }
+}
+</style>

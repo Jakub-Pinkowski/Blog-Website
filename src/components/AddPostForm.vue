@@ -9,6 +9,7 @@
                             type="text"
                             id="title"
                             placeholder="Title"
+                            required
                         />
                     </div>
                     <div class="form-group">
@@ -18,6 +19,7 @@
                             cols="150"
                             rows="15"
                             placeholder="Content"
+                            required
                         ></textarea>
                     </div>
                     <div class="form-group">
