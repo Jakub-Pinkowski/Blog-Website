@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- When logged in-->
+        <!-- When logged in -->
         <div v-if="authStore.user">
             <div class="add-posts">
                 <div class="add-posts">
