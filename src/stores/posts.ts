@@ -4,11 +4,9 @@ import { ref as dbRef, get, push, set } from 'firebase/database'
 
 interface Post {
     id: string
-    details: {
-        title: string
-        content: string
-        image: string
-    }
+    title: string
+    content: string
+    image: string
 }
 
 export const usePostStore = defineStore({
@@ -42,13 +40,10 @@ export const usePostStore = defineStore({
         },
         async addPost(post: Omit<Post, 'id'>) {
             const postsRef = dbRef(database, 'posts')
-            try {
-                const newPostRef = push(postsRef)
-                await set(newPostRef, post.details)
-                this.fetchPosts()
-            } catch (error) {
-                console.error('Error adding post:', error)
-            }
+            const newPostRef = push(postsRef)
+
+            await set(newPostRef, post)
+            this.fetchPosts()
         },
     },
 })

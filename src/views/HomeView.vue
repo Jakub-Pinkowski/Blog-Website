@@ -44,19 +44,21 @@ import { ref, onMounted, computed } from 'vue'
 import { usePostStore } from '@/stores/posts'
 
 const postStore = usePostStore()
+
+onMounted(async () => {
+    await postStore.fetchPosts()
+})
+const posts = computed(() => postStore.posts)
+
 const newPost = ref({
     title: '',
     content: '',
     image: '',
 })
 
-onMounted(async () => {
-    await postStore.fetchPosts()
-    console.log(postStore.posts)
-})
-
 const addNewPost = async () => {
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
+        console.log(newPost.value)
         await postStore.addPost(newPost.value)
         newPost.value = {
             title: '',
@@ -67,7 +69,4 @@ const addNewPost = async () => {
         alert('Please fill out all fields before submitting.')
     }
 }
-
-const posts = computed(() => postStore.posts)
-console.log(posts)
 </script>
