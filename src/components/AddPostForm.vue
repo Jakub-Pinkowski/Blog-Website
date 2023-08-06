@@ -42,7 +42,7 @@
                     <button
                         class="btn btn-sm"
                         type="submit"
-                        :disabled="isUploading"
+                        :disabled="isUploading || !isFormValid"
                     >
                         Add Post
                     </button>
@@ -71,6 +71,12 @@ import Draggable from 'vuedraggable'
 
 const postStore = usePostStore()
 const authStore = useAuthStore()
+
+const isFormValid = computed(() => {
+    return (
+        newPost.value.title.trim() !== '' && newPost.value.content.trim() !== ''
+    )
+})
 
 const isUploading = computed(() => {
     return !!(
