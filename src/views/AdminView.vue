@@ -27,10 +27,18 @@
                                 <label>Drag and drop your photo here:</label>
                                 <div
                                     class="drag-drop-area"
+                                    :class="{
+                                        'drag-over': isDragging,
+                                        'upload-success': isUploaded,
+                                    }"
                                     @drop.prevent="dropHandler"
-                                    @dragover.prevent
+                                    @dragover.prevent="dragOverHandler"
+                                    @dragleave.prevent="dragLeaveHandler"
                                 >
-                                    Drop your file here!
+                                    <span v-if="isUploaded"
+                                        >Uploaded successfully!</span
+                                    >
+                                    <span v-else>Drop your file here!</span>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +104,19 @@ const handleLogin = async () => {
 const draggedFile = ref<File | null>(null)
 const storage = getStorage()
 
+const isDragging = ref(false)
+const isUploaded = ref(false)
+
+const dragOverHandler = () => {
+    isDragging.value = true
+}
+
+const dragLeaveHandler = () => {
+    isDragging.value = false
+}
+
 const dropHandler = (event) => {
+    isDragging.value = false
     if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
         draggedFile.value = event.dataTransfer.items[0].getAsFile()
         event.dataTransfer.clearData()
@@ -152,6 +172,7 @@ const addNewPost = async () => {
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
         console.log(newPost.value)
         await postStore.addPost(newPost.value)
+        isUploaded.value = true
         newPost.value = {
             title: '',
             content: '',
@@ -164,16 +185,37 @@ const addNewPost = async () => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .drag-drop-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 2px dashed #ccc;
     padding: 20px;
     text-align: center;
     cursor: pointer;
-    transition: background 0.3s;
-}
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
 
-.drag-drop-area:hover {
-    background: #f7f7f7;
+    // Hover effect
+    &:hover {
+        background: #f7f7f7;
+        border-color: #aaa;
+        transform: scale(1.05); // Slight scaling for emphasis
+    }
+
+    // Dragging over the drop zone
+    &.drag-over {
+        background: #f0f0f0;
+        border-color: #666;
+        transform: scale(1.1); // Further emphasis during drag
+    }
+
+    // On successful upload
+    &.upload-success {
+        border-color: #4caf50;
+        background-color: #e8f5e9;
+        color: #4caf50;
+        font-weight: bold;
+    }
 }
 </style>
