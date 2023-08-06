@@ -12,15 +12,13 @@
                             required
                         />
                     </div>
-                    <div class="form-group">
-                        <textarea
+                    <div class="form-group quill-editor-container">
+                        <QuillEditor
+                            class="ql_editor"
+                            theme="snow"
+                            :options="editorOptions"
                             v-model="newPost.content"
-                            id="content"
-                            cols="150"
-                            rows="15"
-                            placeholder="Content"
-                            required
-                        ></textarea>
+                        />
                     </div>
                     <div class="form-group">
                         <div
@@ -70,15 +68,37 @@ import {
     getDownloadURL,
 } from 'firebase/storage'
 import Draggable from 'vuedraggable'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const postStore = usePostStore()
 const authStore = useAuthStore()
 
 const isFormValid = computed(() => {
-    return (
-        newPost.value.title.trim() !== '' && newPost.value.content.trim() !== ''
-    )
+    return newPost.value.title.trim() !== ''
 })
+
+// Quill editor options
+const editorOptions = {
+    modules: {
+        toolbar: [
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ script: 'sub' }, { script: 'super' }],
+            [{ indent: '-1' }, { indent: '+1' }],
+            [{ direction: 'rtl' }],
+            [{ size: ['small', false, 'large', 'huge'] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ color: [] }, { background: [] }],
+            [{ font: [] }],
+            [{ align: [] }],
+            ['clean'],
+        ],
+    },
+}
+// Drag and drop functionality
 
 const isUploading = computed(() => {
     return !!(
@@ -200,16 +220,22 @@ const addNewPost = async () => {
         display: flex;
         flex-direction: column;
 
+        .form-group {
+            margin: 1rem 0;
+        }
+
         input {
             width: 50%;
         }
 
-        input,
-        textarea {
-            margin: 1rem 0;
+        input {
             padding: 0.5em;
             border: 1px solid var(--dark-accent);
             border-radius: 5px;
+        }
+
+        .quill-editor-container {
+            height: 300px; /* Adjust the height as needed */
         }
 
         .drag-drop-area {
