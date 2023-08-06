@@ -1,7 +1,5 @@
 @import './base.css';
 
-/* TODO: Change colors */
-
 :root {
     --main-bg-color: #0F1C2E;
     --dark-accent: #1D3557;
