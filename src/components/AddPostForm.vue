@@ -96,6 +96,8 @@ const editorOptions = {
     },
 }
 
+// FIXME: Try to upload just a docx document adn convert it to html
+
 const updateContent = (content) => {
     newPost.value.content = content
 }
