@@ -25,19 +25,27 @@
                             class="drag-drop-area"
                             :class="{
                                 'drag-over': isDragging,
-                                'upload-success': isUploaded,
+                                'upload-success': imageUrl || isProcessing,
                             }"
                             @drop.prevent="dropHandler"
                             @dragover.prevent="dragOverHandler"
+                            @dragenter.prevent="dragEnterHandler"
                             @dragleave.prevent="dragLeaveHandler"
                         >
-                            <span v-if="isUploaded"
-                                >Uploaded successfully!</span
+                            <span v-if="imageUrl">{{ draggedFile.name }}</span>
+                            <span v-else-if="isProcessing"
+                                >Image is processing...</span
                             >
                             <span v-else>Drop an image here</span>
                         </div>
                     </div>
-                    <button class="btn btn-sm" type="submit">Add Post</button>
+                    <button
+                        class="btn btn-sm"
+                        type="submit"
+                        :disabled="isUploading"
+                    >
+                        Add Post
+                    </button>
                 </form>
             </div>
             <div>
@@ -50,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { usePostStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
 import {
@@ -64,27 +72,52 @@ import Draggable from 'vuedraggable'
 const postStore = usePostStore()
 const authStore = useAuthStore()
 
-// Drag and drop styling
+const isUploading = computed(() => {
+    return !!(
+        newPost.value.title &&
+        newPost.value.content &&
+        imageUrl.value &&
+        !isProcessing.value
+    )
+})
+
+const isProcessing = ref(false)
+
 const isDragging = ref(false)
-const isUploaded = ref(false)
+const imageUrl = ref(null)
+const draggedFile = ref<File | null>(null)
+const storage = getStorage()
 
 const dragOverHandler = () => {
     isDragging.value = true
 }
 
-const dragLeaveHandler = () => {
-    isDragging.value = false
+const dragEnterHandler = () => {
+    isDragging.value = true
 }
 
-// Upload image
-const draggedFile = ref<File | null>(null)
-const storage = getStorage()
+const dragLeaveHandler = () => {
+    if (!imageUrl.value && !isProcessing.value) {
+        isDragging.value = false
+    }
+}
 
 const dropHandler = (event) => {
     isDragging.value = false
     if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
         draggedFile.value = event.dataTransfer.items[0].getAsFile()
         event.dataTransfer.clearData()
+        isProcessing.value = true
+        uploadImage()
+            .then((url) => {
+                imageUrl.value = url
+            })
+            .catch((error) => {
+                console.error('Upload failed:', error)
+            })
+            .finally(() => {
+                isProcessing.value = false
+            })
     }
 }
 
@@ -95,28 +128,21 @@ const uploadImage = async () => {
     }`
     const storageReference = storageRef(storage, filePath)
 
-    const uploadTask = uploadBytesResumable(storageReference, draggedFile.value)
-
-    return new Promise((resolve, reject) => {
-        uploadTask.on(
-            'state_changed',
-            (snapshot) => {
-                const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                console.log('Upload is ' + progress + '% done')
-            },
-            (error) => {
-                console.error('Upload failed:', error)
-                reject(error)
-            },
-            async () => {
-                const imageUrl = await getDownloadURL(storageReference)
-                resolve(imageUrl)
-            }
+    try {
+        const snapshot = await uploadBytesResumable(
+            storageReference,
+            draggedFile.value
         )
-    })
-}
 
+        // Wait for the upload to complete and get the download URL
+        const url = await getDownloadURL(snapshot.ref)
+
+        return url
+    } catch (error) {
+        console.error('Upload failed:', error)
+        throw error
+    }
+}
 // Add new post
 const newPost = ref({
     title: '',
@@ -127,9 +153,12 @@ const newPost = ref({
 const addNewPost = async () => {
     if (draggedFile.value) {
         try {
+            isProcessing.value = true // Set isProcessing to true when the file is dropped
             newPost.value.image = await uploadImage()
+            isProcessing.value = false // Set isProcessing to false after successful upload
         } catch (error) {
             alert('Failed to upload image: ' + error.message)
+            isProcessing.value = false // Set isProcessing to false on error
             return
         }
     }
@@ -137,12 +166,12 @@ const addNewPost = async () => {
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
         console.log(newPost.value)
         await postStore.addPost(newPost.value)
-        isUploaded.value = true
         newPost.value = {
             title: '',
             content: '',
             image: '',
         }
+        imageUrl.value = null
         draggedFile.value = null // Clear the dragged file after successful post
     } else {
         alert('Please fill out all fields before submitting.')
