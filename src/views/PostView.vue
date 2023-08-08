@@ -7,14 +7,15 @@
             </h3>
             <h1>{{ post.title }}</h1>
             <img :src="post.image" alt="Post Image" />
-            <div v-html="post.content"></div>
+            <div v-html="post.content" class="content"></div>
             <h3>
                 {{ author }}
             </h3>
-            <div>
-                <router-link v-if="nextPost" :to="'/post/' + nextPost.id">
+            <div class="links">
+                <router-link to="'/'">Back to Blog</router-link>
+                <a v-if="nextPost" :href="'/post/' + nextPost.id">
                     {{ nextPost.title }}
-                </router-link>
+                </a>
             </div>
         </div>
         <div v-else class="loading-message">
@@ -41,14 +42,14 @@ const post = computed(() =>
     postStore.posts.find((post) => post.id === postId.value)
 )
 
-// BUG: Fix the next post link
+// FIXME: Fix the Websocket issue when navigating to the next post
 const nextPost = computed(() => {
     if (!post || !postFetched) {
         return null
     }
 
     const currentPostIndex = postStore.posts.findIndex(
-        (p) => p.id === postId.value
+        (post) => post.id === postId.value
     )
     if (
         currentPostIndex === -1 ||
@@ -56,7 +57,6 @@ const nextPost = computed(() => {
     ) {
         return null
     }
-
     return postStore.posts[currentPostIndex + 1]
 })
 
@@ -72,12 +72,33 @@ onMounted(async () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 5rem;
+    margin-top: 4rem;
 
     img {
         width: 100%;
         max-width: 800px;
         margin-bottom: 2rem;
+    }
+
+    .content {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 2rem;
+    }
+
+    .links {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 1rem;
+
+        a {
+            color: var(--dark-gray);
+            font-size: 1.5rem;
+            font-weight: 400;
+            text-decoration: none;
+            margin: 1rem 2rem;
+        }
     }
 }
 
