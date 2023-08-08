@@ -2,15 +2,17 @@
     <div>
         <div class="post_gallery">
             <router-link
-                v-for="post in posts"
+                v-for="(post, index) in posts"
                 :key="post.id"
                 :to="'/post/' + post.id"
+                :style="{ gridColumn: index % 2 === 0 ? '1' : '2' }"
             >
                 <div class="post">
                     <img :src="post.image" alt="" />
                     <div class="text">
-                        <h1>{{ post.title }}</h1>
-                        <h2>{{ post.date }}</h2>
+                        <h3>{{ post.date }}</h3>
+                        <h2>{{ post.title }}</h2>
+                        <span class="read_more">Read More</span>
                     </div>
                 </div>
             </router-link>
@@ -55,25 +57,26 @@ const closeModal = () => {
 
 <style scoped lang="scss">
 .post_gallery {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 2rem;
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
 
     .post {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
         width: 100%;
         height: 100vh;
-        margin: 1rem 0;
-        padding: 1rem;
 
         img {
-            width: 30%;
+            width: 70%;
             height: auto;
             object-fit: cover;
             border-radius: 5px;
@@ -89,10 +92,18 @@ const closeModal = () => {
         .text {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
+            justify-content: center;
+            align-items: center;
             width: 70%;
-            margin-left: 1rem;
+            margin: 1rem;
+
+            .read_more {
+                color: var(--dark-gray);
+                font-size: 1.2rem;
+                font-weight: 500;
+                transition: all 0.3s ease-out;
+                text-decoration: underline;
+            }
         }
     }
 }

@@ -68,7 +68,7 @@ h2 {
 
 h3 {
     color: var(--dark-gray);
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 400;
     margin-bottom: 2rem;
 }
