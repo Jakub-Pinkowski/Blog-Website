@@ -215,11 +215,14 @@ const newPost = ref({
     title: '',
     content: '',
     image: '',
+    date: '',
 })
 
 const addNewPost = async () => {
-    // Check if image has been uploaded
-    if (!imageDrop.contentUrl.value) {
+    // Check if image has been uploaded by the user
+    if (imageDrop.contentUrl.value) {
+        newPost.value.image = imageDrop.contentUrl.value
+    } else {
         alert('Please upload an image before submitting.')
         return
     }
@@ -230,9 +233,17 @@ const addNewPost = async () => {
         return
     }
 
+    console.log(newPost.value)
     // Check if all fields are filled out
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
         try {
+            // Add date to the post in the format of DD-MM-YYYY
+            const date = new Date()
+            const day = date.getDate()
+            const month = date.getMonth() + 1
+            const year = date.getFullYear()
+            newPost.value.date = `${day}-${month}-${year}`
+
             await postStore.addPost(newPost.value)
             alert('Post added successfully!')
 
@@ -241,6 +252,7 @@ const addNewPost = async () => {
                 title: '',
                 content: '',
                 image: '',
+                date: '',
             }
             // Reset drag and drop fields
             imageDrop.contentUrl.value = null

@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
 export const useViewStore = defineStore({
     id: 'viewStore',
@@ -11,4 +11,4 @@ export const useViewStore = defineStore({
             },
         ],
     }),
-});
+})

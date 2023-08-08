@@ -7,6 +7,7 @@ interface Post {
     title: string
     content: string
     image: string
+    date: string
 }
 
 export const usePostStore = defineStore({
@@ -26,6 +27,7 @@ export const usePostStore = defineStore({
                         title: rawData[key].title,
                         content: rawData[key].content,
                         image: rawData[key].image,
+                        date: rawData[key].date,
                     }))
                 } else {
                     this.posts = []

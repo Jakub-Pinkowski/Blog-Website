@@ -4,8 +4,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '@fortawesome/fontawesome-free/css/all.css'
 
-import { firebaseApp } from './assets/firebase'
-
 import TheLogo from './components/TheLogo.vue'
 import ViewDescription from './components/ViewDescription.vue'
 

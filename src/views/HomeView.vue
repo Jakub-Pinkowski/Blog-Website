@@ -1,13 +1,18 @@
 <template>
-    <main>
+    <div>
         <div class="post_gallery">
-            <div class="post" v-for="post in posts" :key="post.id">
-                <img :src="post.image" alt="" @click="openModal(post.image)" />
-                <div class="text">
-                    <h1>{{ post.title }}</h1>
-                    <div v-html="post.content"></div>
+            <router-link
+                v-for="post in posts"
+                :key="post.id"
+                :to="'/post/' + post.id"
+            >
+                <div class="post">
+                    <img :src="post.image" alt="" />
+                    <div class="text">
+                        <h1>{{ post.title }}</h1>
+                    </div>
                 </div>
-            </div>
+            </router-link>
         </div>
 
         <!-- Modal-->
@@ -19,7 +24,7 @@
                 </div>
             </div>
         </transition>
-    </main>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +35,6 @@ const postStore = usePostStore()
 
 onMounted(async () => {
     await postStore.fetchPosts()
-    console.log('posts is: ', posts.value)
 })
 const posts = computed(() => postStore.posts)
 
