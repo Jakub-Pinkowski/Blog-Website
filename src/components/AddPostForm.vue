@@ -86,15 +86,6 @@ const isFormValid = computed(() => {
 // FIXME: Try to upload just a docx document and convert it to html
 
 // Drag and drop functionality
-const isUploading = computed(() => {
-    return !!(
-        newPost.value.title &&
-        newPost.value.content &&
-        imageUrl.value &&
-        !isProcessing.value
-    )
-})
-
 const isProcessing = ref(false)
 const isDragging = ref(false)
 const imageUrl = ref<string | null>(null)
@@ -269,15 +260,20 @@ const addNewPost = async () => {
     }
 
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
-        console.log(newPost.value)
-        await postStore.addPost(newPost.value)
-        newPost.value = {
-            title: '',
-            content: '',
-            image: '',
+        try {
+            await postStore.addPost(newPost.value)
+            alert('Post added successfully!')
+
+            newPost.value = {
+                title: '',
+                content: '',
+                image: '',
+            }
+            imageUrl.value = null
+            draggedFile.value = null
+        } catch (error) {
+            alert('Failed to add the post. Please try again.')
         }
-        imageUrl.value = null
-        draggedFile.value = null // Clear the dragged file after successful post
     } else {
         alert('Please fill out all fields before submitting.')
     }
