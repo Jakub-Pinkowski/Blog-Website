@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div class="view">
+        <h1>Blog</h1>
         <div class="post_gallery">
             <router-link
                 v-for="(post, index) in posts"
@@ -99,10 +100,11 @@ const closeModal = () => {
 
             .read_more {
                 color: var(--dark-gray);
-                font-size: 1.2rem;
+                font-size: 1rem;
                 font-weight: 500;
-                transition: all 0.3s ease-out;
                 text-decoration: underline;
+                line-height: 1.5;
+                transition: all 0.3s ease-out;
             }
         }
     }
