@@ -12,44 +12,57 @@
                             required
                         />
                     </div>
-                    <div class="form-group">
-                        <div
-                            class="drag-drop-area"
-                            :class="{
-                                'drag-over': isDragging,
-                                'upload-success': imageUrl || isProcessing,
-                            }"
-                            @drop.prevent="dropHandler"
-                            @dragover.prevent="dragOverHandler"
-                            @dragenter.prevent="dragEnterHandler"
-                            @dragleave.prevent="dragLeaveHandler"
+                    <div
+                        class="drag-drop-area"
+                        :class="{
+                            'drag-over': imageDrop.isDragging.value,
+                            'upload-success':
+                                imageDrop.contentUrl.value ||
+                                imageDrop.isProcessing.value,
+                        }"
+                        @drop.prevent="(event) => dropHandler(event, imageDrop)"
+                        @dragover.prevent="() => dragOverHandler(imageDrop)"
+                        @dragenter.prevent="() => dragEnterHandler(imageDrop)"
+                        @dragleave.prevent="() => dragLeaveHandler(imageDrop)"
+                    >
+                        <span
+                            v-if="
+                                imageDrop.contentUrl.value !== null &&
+                                imageDrop.contentUrl.value !== undefined
+                            "
                         >
-                            <span v-if="imageUrl">{{ draggedFile?.name }}</span>
-                            <span v-else-if="isProcessing"
-                                >Image is processing...</span
-                            >
-                            <span v-else>Drop an image here</span>
-                        </div>
+                            {{ imageDrop.draggedFile.value?.name }}
+                        </span>
+                        <span v-else-if="imageDrop.isProcessing.value">{{
+                            imageDrop.successMessage
+                        }}</span>
+                        <span v-else>{{ imageDrop.dropMessage }}</span>
                     </div>
-                    <div class="form-group">
-                        <div
-                            class="drag-drop-area"
-                            :class="{
-                                'drag-over': isDraggingHTML,
-                                'upload-success':
-                                    htmlContent || isProcessingHTML,
-                            }"
-                            @drop.prevent="dropHandlerHTML"
-                            @dragover.prevent="dragOverHandlerHTML"
-                            @dragenter.prevent="dragEnterHandlerHTML"
-                            @dragleave.prevent="dragLeaveHandlerHTML"
+                    <div
+                        class="drag-drop-area"
+                        :class="{
+                            'drag-over': htmlDrop.isDragging.value,
+                            'upload-success':
+                                htmlDrop.contentUrl.value ||
+                                htmlDrop.isProcessing.value,
+                        }"
+                        @drop.prevent="(event) => dropHandler(event, htmlDrop)"
+                        @dragover.prevent="() => dragOverHandler(htmlDrop)"
+                        @dragenter.prevent="() => dragEnterHandler(htmlDrop)"
+                        @dragleave.prevent="() => dragLeaveHandler(htmlDrop)"
+                    >
+                        <span
+                            v-if="
+                                htmlDrop.contentUrl.value !== null &&
+                                htmlDrop.contentUrl.value !== undefined
+                            "
                         >
-                            <span v-if="htmlContent">HTML File Loaded</span>
-                            <span v-else-if="isProcessingHTML"
-                                >HTML is processing...</span
-                            >
-                            <span v-else>Drop an HTML file here</span>
-                        </div>
+                            {{ htmlDrop.draggedFile.value?.name }}
+                        </span>
+                        <span v-else-if="htmlDrop.isProcessing.value">{{
+                            htmlDrop.successMessage
+                        }}</span>
+                        <span v-else>{{ htmlDrop.dropMessage }}</span>
                     </div>
                     <button class="btn btn-sm" type="submit">Add Post</button>
                 </form>
@@ -77,6 +90,8 @@ import {
 const postStore = usePostStore()
 const authStore = useAuthStore()
 
+// FIXME: Fix form validation
+
 const isFormValid = computed(() => {
     return (
         newPost.value.title.trim() !== '' && newPost.value.content.trim() !== ''
@@ -86,139 +101,119 @@ const isFormValid = computed(() => {
 // FIXME: Try to upload just a docx document and convert it to html
 
 // Drag and drop functionality
-const isProcessing = ref(false)
-const isDragging = ref(false)
-const imageUrl = ref<string | null>(null)
-const draggedFile = ref<File | null>(null)
+
 const storage = getStorage()
-
-const dragOverHandler = () => {
-    isDragging.value = true
+const imageDrop = {
+    isDragging: ref(false),
+    isProcessing: ref(false),
+    contentUrl: ref<string | null>(null),
+    draggedFile: ref<File | null>(null),
+    contentType: 'image',
+    acceptedType: 'image/*',
+    successMessage: 'Image is processing...',
+    dropMessage: 'Drop an image here',
+}
+const htmlDrop = {
+    isDragging: ref(false),
+    isProcessing: ref(false),
+    contentUrl: ref<string | null>(null),
+    draggedFile: ref<File | null>(null),
+    contentType: 'html',
+    acceptedType: 'text/html',
+    successMessage: 'HTML is processing...',
+    dropMessage: 'Drop an HTML file here',
 }
 
-const dragEnterHandler = () => {
-    isDragging.value = true
+const dragOverHandler = (dropType: typeof imageDrop | typeof htmlDrop) => {
+    dropType.isDragging.value = true
 }
 
-const dragLeaveHandler = () => {
-    if (!imageUrl.value && !isProcessing.value) {
-        isDragging.value = false
+const dragEnterHandler = (dropType: typeof imageDrop | typeof htmlDrop) => {
+    dropType.isDragging.value = true
+}
+
+const dragLeaveHandler = (dropType: typeof imageDrop | typeof htmlDrop) => {
+    if (!dropType.contentUrl.value && !dropType.isProcessing.value) {
+        dropType.isDragging.value = false
     }
 }
 
-const dropHandler = (event: DragEvent) => {
-    isDragging.value = false
+const dropHandler = async (
+    event: DragEvent,
+    dropType: typeof imageDrop | typeof htmlDrop
+) => {
+    dropType.isDragging.value = false
+
     if (
         event.dataTransfer &&
         event.dataTransfer.items &&
         event.dataTransfer.items.length > 0
     ) {
-        draggedFile.value = event.dataTransfer.items[0].getAsFile()
-        event.dataTransfer.clearData()
-        isProcessing.value = true
+        const draggedFile = event.dataTransfer.items[0].getAsFile()
 
-        uploadImage()
-            .then((url) => {
-                if (url !== undefined) {
-                    imageUrl.value = url
-                } else {
-                    // Handle the case when url is undefined if necessary
-                    console.error('Upload succeeded, but no URL was returned.')
+        if (draggedFile) {
+            dropType.draggedFile.value = draggedFile
+            dropType.isProcessing.value = true
+
+            let result
+
+            if (
+                dropType.contentType === 'image' &&
+                draggedFile.type.startsWith('image/')
+            ) {
+                result = await uploadContent(draggedFile, 'image')
+            } else if (
+                dropType.contentType === 'html' &&
+                draggedFile.type === 'text/html'
+            ) {
+                result = await uploadContent(draggedFile, 'html')
+            }
+
+            if (result !== undefined) {
+                dropType.contentUrl.value = result
+                if (dropType.contentType === 'html') {
+                    newPost.value.content = result
                 }
-            })
-            .catch((error) => {
-                console.error('Upload failed:', error)
-            })
-            .finally(() => {
-                isProcessing.value = false
-            })
+            } else {
+                console.error(
+                    `Upload of ${dropType.contentType} succeeded, but no content was returned.`
+                )
+            }
+
+            dropType.isProcessing.value = false
+        }
     }
 }
 
-const uploadImage = async () => {
-    if (!draggedFile.value) return
-    const filePath = `posts/${new Date().toISOString()}-${
-        draggedFile.value.name
-    }`
-    const storageReference = storageRef(storage, filePath)
+const uploadContent = async (
+    file: File | null,
+    type: 'image' | 'html'
+): Promise<string | undefined> => {
+    if (!file) return
 
-    try {
-        const snapshot = await uploadBytesResumable(
-            storageReference,
-            draggedFile.value
-        )
+    if (type === 'image') {
+        const filePath = `posts/${new Date().toISOString()}-${file.name}`
+        const storageReference = storageRef(storage, filePath)
 
-        // Wait for the upload to complete and get the download URL
-        const url = await getDownloadURL(snapshot.ref)
+        try {
+            const snapshot = await uploadBytesResumable(storageReference, file)
 
-        return url
-    } catch (error) {
-        console.error('Upload failed:', error)
-        throw error
-    }
-}
+            // Wait for the upload to complete and get the download URL
+            const url = await getDownloadURL(snapshot.ref)
 
-// Drag and drop functionality for HTML
-const isDraggingHTML = ref(false)
-const isProcessingHTML = ref(false)
-const htmlContent = ref<string | null>(null)
-const draggedHTMLFile = ref<File | null>(null)
-
-const dragOverHandlerHTML = () => {
-    isDraggingHTML.value = true
-}
-
-const dragEnterHandlerHTML = () => {
-    isDraggingHTML.value = true
-}
-
-const dragLeaveHandlerHTML = () => {
-    if (!htmlContent.value && !isProcessingHTML.value) {
-        isDraggingHTML.value = false
-    }
-}
-
-const dropHandlerHTML = (event: DragEvent) => {
-    isDraggingHTML.value = false
-    if (
-        event.dataTransfer &&
-        event.dataTransfer.items &&
-        event.dataTransfer.items.length > 0 &&
-        event.dataTransfer.items[0].type === 'text/html' // Ensure it's an HTML file
-    ) {
-        draggedHTMLFile.value = event.dataTransfer.items[0].getAsFile()
-        event.dataTransfer.clearData()
-        isProcessingHTML.value = true
-
-        loadHTMLContent()
-            .then((content) => {
-                if (content !== undefined) {
-                    htmlContent.value = content
-                    newPost.value.content = content
-                } else {
-                    console.error(
-                        'Upload succeeded, but no content was returned.'
-                    )
-                }
-            })
-            .catch((error) => {
-                console.error('HTML loading failed:', error)
-            })
-            .finally(() => {
-                isProcessingHTML.value = false
-            })
-    }
-}
-
-const loadHTMLContent = async () => {
-    if (!draggedHTMLFile.value) return
-
-    try {
-        const content = await draggedHTMLFile.value.text()
-        return content
-    } catch (error) {
-        console.error('Loading failed:', error)
-        throw error
+            return url
+        } catch (error) {
+            console.error('Image upload failed:', error)
+            throw error
+        }
+    } else if (type === 'html') {
+        try {
+            const content = await file.text()
+            return content
+        } catch (error) {
+            console.error('HTML loading failed:', error)
+            throw error
+        }
     }
 }
 
@@ -230,35 +225,21 @@ const newPost = ref({
 })
 
 const addNewPost = async () => {
-    if (draggedFile.value) {
-        try {
-            isProcessing.value = true
-            const uploadResult = await uploadImage()
-
-            if (typeof uploadResult === 'string') {
-                newPost.value.image = uploadResult
-            } else {
-                throw new Error('Image upload returned an undefined URL.')
-            }
-
-            isProcessing.value = false
-        } catch (error) {
-            isProcessing.value = false
-
-            if (
-                typeof error === 'object' &&
-                error !== null &&
-                'message' in error
-            ) {
-                alert('Failed to upload image: ' + error.message)
-            } else {
-                alert('Failed to upload image.')
-            }
-
-            return
-        }
+    // Check if image has been uploaded
+    if (imageDrop.contentUrl.value) {
+        newPost.value.image = imageDrop.contentUrl.value
+    } else {
+        alert('Please upload an image before submitting.')
+        return
     }
 
+    // Check if HTML has been uploaded
+    if (!htmlDrop.contentUrl.value) {
+        alert('Please upload an HTML file before submitting.')
+        return
+    }
+
+    // Check if all fields are filled out
     if (newPost.value.title && newPost.value.content && newPost.value.image) {
         try {
             await postStore.addPost(newPost.value)
@@ -269,8 +250,11 @@ const addNewPost = async () => {
                 content: '',
                 image: '',
             }
-            imageUrl.value = null
-            draggedFile.value = null
+            // Reset drag and drop fields
+            imageDrop.contentUrl.value = null
+            imageDrop.draggedFile.value = null
+            htmlDrop.contentUrl.value = null
+            htmlDrop.draggedFile.value = null
         } catch (error) {
             alert('Failed to add the post. Please try again.')
         }
@@ -305,10 +289,6 @@ const addNewPost = async () => {
             padding: 0.5em;
             border: 1px solid var(--dark-accent);
             border-radius: 5px;
-        }
-
-        .quill-editor-container {
-            height: 300px; /* Adjust the height as needed */
         }
 
         .drag-drop-area {
