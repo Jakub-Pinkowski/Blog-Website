@@ -77,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { usePostStore } from '@/stores/posts'
 import { useAuthStore } from '@/stores/auth'
 import {
@@ -90,13 +90,9 @@ import {
 const postStore = usePostStore()
 const authStore = useAuthStore()
 
-// FIXME: Fix form validation
-
-// FIXME: Try to upload just a docx document and convert it to html
-
 // Drag and drop functionality
-
 const storage = getStorage()
+
 const imageDrop = {
     isDragging: ref(false),
     isProcessing: ref(false),
@@ -145,6 +141,7 @@ const dropHandler = async (
     ) {
         const draggedFile = event.dataTransfer.items[0].getAsFile()
 
+        // Check if file is of accepted type
         if (draggedFile) {
             dropType.draggedFile.value = draggedFile
             dropType.isProcessing.value = true
@@ -186,10 +183,12 @@ const uploadContent = async (
     if (!file) return
 
     if (type === 'image') {
+        // Create a storage reference from firebase
         const filePath = `posts/${new Date().toISOString()}-${file.name}`
         const storageReference = storageRef(storage, filePath)
 
         try {
+            // Upload file and metadata to the object 'images/mountains.jpg'
             const snapshot = await uploadBytesResumable(storageReference, file)
 
             // Wait for the upload to complete and get the download URL
@@ -220,9 +219,7 @@ const newPost = ref({
 
 const addNewPost = async () => {
     // Check if image has been uploaded
-    if (imageDrop.contentUrl.value) {
-        newPost.value.image = imageDrop.contentUrl.value
-    } else {
+    if (!imageDrop.contentUrl.value) {
         alert('Please upload an image before submitting.')
         return
     }
@@ -239,6 +236,7 @@ const addNewPost = async () => {
             await postStore.addPost(newPost.value)
             alert('Post added successfully!')
 
+            // Reset form
             newPost.value = {
                 title: '',
                 content: '',
@@ -316,28 +314,28 @@ const addNewPost = async () => {
             }
         }
     }
-}
 
-button {
-    margin: 1rem 0;
-    width: 90px;
-    border: 1px solid var(--dark-accent);
-    color: var(--main-bg-color);
-    transition: background-color 0.5s ease;
-}
+    button {
+        margin: 1rem 0;
+        width: 90px;
+        border: 1px solid var(--dark-accent);
+        color: var(--main-bg-color);
+        transition: background-color 0.5s ease;
+    }
 
-button:hover {
-    border: 1px solid var(--dark-accent);
-    background-color: var(--light-accent);
-}
+    button:hover {
+        border: 1px solid var(--dark-accent);
+        background-color: var(--light-accent);
+    }
 
-.logout {
-    margin-top: 4rem;
-    transition: background-color 0.5s ease;
-}
+    .logout {
+        margin-top: 4rem;
+        transition: background-color 0.5s ease;
+    }
 
-.logout:hover {
-    background-color: var(--accent-color);
-    color: var(--light-gray);
+    .logout:hover {
+        background-color: var(--accent-color);
+        color: var(--light-gray);
+    }
 }
 </style>
