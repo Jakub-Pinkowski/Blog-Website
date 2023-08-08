@@ -31,6 +31,26 @@
                             <span v-else>Drop an image here</span>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div
+                            class="drag-drop-area"
+                            :class="{
+                                'drag-over': isDraggingHTML,
+                                'upload-success':
+                                    htmlContent || isProcessingHTML,
+                            }"
+                            @drop.prevent="dropHandlerHTML"
+                            @dragover.prevent="dragOverHandlerHTML"
+                            @dragenter.prevent="dragEnterHandlerHTML"
+                            @dragleave.prevent="dragLeaveHandlerHTML"
+                        >
+                            <span v-if="htmlContent">HTML File Loaded</span>
+                            <span v-else-if="isProcessingHTML"
+                                >HTML is processing...</span
+                            >
+                            <span v-else>Drop an HTML file here</span>
+                        </div>
+                    </div>
                     <button class="btn btn-sm" type="submit">Add Post</button>
                 </form>
             </div>
@@ -76,7 +96,6 @@ const isUploading = computed(() => {
 })
 
 const isProcessing = ref(false)
-
 const isDragging = ref(false)
 const imageUrl = ref<string | null>(null)
 const draggedFile = ref<File | null>(null)
@@ -147,6 +166,71 @@ const uploadImage = async () => {
         throw error
     }
 }
+
+// Drag and drop functionality for HTML
+const isDraggingHTML = ref(false)
+const isProcessingHTML = ref(false)
+const htmlContent = ref<string | null>(null)
+const draggedHTMLFile = ref<File | null>(null)
+
+const dragOverHandlerHTML = () => {
+    isDraggingHTML.value = true
+}
+
+const dragEnterHandlerHTML = () => {
+    isDraggingHTML.value = true
+}
+
+const dragLeaveHandlerHTML = () => {
+    if (!htmlContent.value && !isProcessingHTML.value) {
+        isDraggingHTML.value = false
+    }
+}
+
+const dropHandlerHTML = (event: DragEvent) => {
+    isDraggingHTML.value = false
+    if (
+        event.dataTransfer &&
+        event.dataTransfer.items &&
+        event.dataTransfer.items.length > 0 &&
+        event.dataTransfer.items[0].type === 'text/html' // Ensure it's an HTML file
+    ) {
+        draggedHTMLFile.value = event.dataTransfer.items[0].getAsFile()
+        event.dataTransfer.clearData()
+        isProcessingHTML.value = true
+
+        loadHTMLContent()
+            .then((content) => {
+                if (content !== undefined) {
+                    htmlContent.value = content
+                    newPost.value.content = content
+                } else {
+                    console.error(
+                        'Upload succeeded, but no content was returned.'
+                    )
+                }
+            })
+            .catch((error) => {
+                console.error('HTML loading failed:', error)
+            })
+            .finally(() => {
+                isProcessingHTML.value = false
+            })
+    }
+}
+
+const loadHTMLContent = async () => {
+    if (!draggedHTMLFile.value) return
+
+    try {
+        const content = await draggedHTMLFile.value.text()
+        return content
+    } catch (error) {
+        console.error('Loading failed:', error)
+        throw error
+    }
+}
+
 // Add new post
 const newPost = ref({
     title: '',

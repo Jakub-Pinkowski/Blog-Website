@@ -2,11 +2,7 @@
     <main>
         <div class="post_gallery">
             <div class="post" v-for="post in posts" :key="post.id">
-                <img
-                    :src="post.image"
-                    alt=""
-                    @click="openModal(post.image)"
-                />
+                <img :src="post.image" alt="" @click="openModal(post.image)" />
                 <div class="text">
                     <h1>{{ post.title }}</h1>
                     <div v-html="post.content"></div>
@@ -39,8 +35,8 @@ onMounted(async () => {
 const posts = computed(() => postStore.posts)
 
 // Modal functionality
-let modalOpen = ref(false)
-let modalImage = ref('')
+const modalOpen = ref(false)
+const modalImage = ref('')
 
 const openModal = (imageSrc: string) => {
     modalImage.value = imageSrc
