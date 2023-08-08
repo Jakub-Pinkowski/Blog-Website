@@ -20,17 +20,17 @@
 
 <script setup lang="ts">
 // TODO: Change the photo
-import about_photo from '@/assets/images/about.jpg';
+import about_photo from '@/assets/images/about.jpg'
 
-import ContactForm from '../components/ContactForm.vue';
+import ContactForm from '../components/ContactForm.vue'
 
 const about_title =
     // TODO: Change the title
-    'Artistic soul. Berlin.';
+    'Artistic soul. Berlin.'
 
 const description =
     // TODO: Change the description
-    "Photography is my passion and I would like to share my best work here. I am interested in traveling, aesthetics, and fashion photography. Recently, I've started diving into videography and I hope to share my first work soon. I will be happy to work on interesting projects and welcome all creative souls to reach out to me via social platforms or the form below.";
+    "Photography is my passion and I would like to share my best work here. I am interested in traveling, aesthetics, and fashion photography. Recently, I've started diving into videography and I hope to share my first work soon. I will be happy to work on interesting projects and welcome all creative souls to reach out to me via social platforms or the form below."
 </script>
 
 <style scoped lang="scss">

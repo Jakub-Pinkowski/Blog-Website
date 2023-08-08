@@ -12,15 +12,6 @@
                             required
                         />
                     </div>
-                    <div class="form-group quill-editor-container">
-                        <QuillEditor
-                            class="ql_editor"
-                            theme="snow"
-                            :options="editorOptions"
-                            v-model="newPost.content"
-                            @text-change="updateContent"
-                        />
-                    </div>
                     <div class="form-group">
                         <div
                             class="drag-drop-area"
@@ -33,7 +24,7 @@
                             @dragenter.prevent="dragEnterHandler"
                             @dragleave.prevent="dragLeaveHandler"
                         >
-                            <span v-if="imageUrl">{{ draggedFile.name }}</span>
+                            <span v-if="imageUrl">{{ draggedFile?.name }}</span>
                             <span v-else-if="isProcessing"
                                 >Image is processing...</span
                             >
@@ -62,9 +53,6 @@ import {
     uploadBytesResumable,
     getDownloadURL,
 } from 'firebase/storage'
-import Draggable from 'vuedraggable'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 const postStore = usePostStore()
 const authStore = useAuthStore()
@@ -75,32 +63,7 @@ const isFormValid = computed(() => {
     )
 })
 
-// Quill editor options
-const editorOptions = {
-    modules: {
-        toolbar: [
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            [{ script: 'sub' }, { script: 'super' }],
-            [{ indent: '-1' }, { indent: '+1' }],
-            [{ direction: 'rtl' }],
-            [{ size: ['small', false, 'large', 'huge'] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            [{ color: [] }, { background: [] }],
-            [{ font: [] }],
-            [{ align: [] }],
-            ['clean'],
-        ],
-    },
-}
-
-// FIXME: Try to upload just a docx document adn convert it to html
-
-const updateContent = (content) => {
-    newPost.value.content = content
-}
+// FIXME: Try to upload just a docx document and convert it to html
 
 // Drag and drop functionality
 const isUploading = computed(() => {
@@ -115,7 +78,7 @@ const isUploading = computed(() => {
 const isProcessing = ref(false)
 
 const isDragging = ref(false)
-const imageUrl = ref(null)
+const imageUrl = ref<string | null>(null)
 const draggedFile = ref<File | null>(null)
 const storage = getStorage()
 
@@ -133,15 +96,25 @@ const dragLeaveHandler = () => {
     }
 }
 
-const dropHandler = (event) => {
+const dropHandler = (event: DragEvent) => {
     isDragging.value = false
-    if (event.dataTransfer.items && event.dataTransfer.items.length > 0) {
+    if (
+        event.dataTransfer &&
+        event.dataTransfer.items &&
+        event.dataTransfer.items.length > 0
+    ) {
         draggedFile.value = event.dataTransfer.items[0].getAsFile()
         event.dataTransfer.clearData()
         isProcessing.value = true
+
         uploadImage()
             .then((url) => {
-                imageUrl.value = url
+                if (url !== undefined) {
+                    imageUrl.value = url
+                } else {
+                    // Handle the case when url is undefined if necessary
+                    console.error('Upload succeeded, but no URL was returned.')
+                }
             })
             .catch((error) => {
                 console.error('Upload failed:', error)
@@ -185,11 +158,28 @@ const addNewPost = async () => {
     if (draggedFile.value) {
         try {
             isProcessing.value = true
-            newPost.value.image = await uploadImage()
+            const uploadResult = await uploadImage()
+
+            if (typeof uploadResult === 'string') {
+                newPost.value.image = uploadResult
+            } else {
+                throw new Error('Image upload returned an undefined URL.')
+            }
+
             isProcessing.value = false
         } catch (error) {
-            alert('Failed to upload image: ' + error.message)
             isProcessing.value = false
+
+            if (
+                typeof error === 'object' &&
+                error !== null &&
+                'message' in error
+            ) {
+                alert('Failed to upload image: ' + error.message)
+            } else {
+                alert('Failed to upload image.')
+            }
+
             return
         }
     }

@@ -34,6 +34,7 @@ const postStore = usePostStore()
 
 onMounted(async () => {
     await postStore.fetchPosts()
+    console.log('posts is: ', posts.value)
 })
 const posts = computed(() => postStore.posts)
 
