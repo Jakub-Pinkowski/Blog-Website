@@ -20,7 +20,6 @@ const router = createRouter({
             component: () => import('../views/AdminView.vue'),
         },
         {
-            // Cath all 404, redirect to home
             path: '/:pathMatch(.*)*',
             name: 'not-found',
             redirect: '/',
