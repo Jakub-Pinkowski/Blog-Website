@@ -10,6 +10,7 @@
                     <img :src="post.image" alt="" />
                     <div class="text">
                         <h1>{{ post.title }}</h1>
+                        <h2>{{ post.date }}</h2>
                     </div>
                 </div>
             </router-link>

@@ -242,7 +242,7 @@ const addNewPost = async () => {
             const day = date.getDate()
             const month = date.getMonth() + 1
             const year = date.getFullYear()
-            newPost.value.date = `${day}-${month}-${year}`
+            newPost.value.date = `${day}/${month}/${year}`
 
             await postStore.addPost(newPost.value)
             alert('Post added successfully!')
