@@ -21,16 +21,12 @@ export const usePostStore = defineStore({
                 const snapshot = await get(postsRef)
                 if (snapshot.exists()) {
                     const rawData = snapshot.val()
-                    this.posts = Object.keys(rawData).map((key) => {
-                        return {
-                            id: key,
-                            details: {
-                                title: rawData[key].title,
-                                content: rawData[key].content,
-                                image: rawData[key].image,
-                            },
-                        }
-                    })
+                    this.posts = Object.keys(rawData).map((key) => ({
+                        id: key,
+                        title: rawData[key].title,
+                        content: rawData[key].content,
+                        image: rawData[key].image,
+                    }))
                 } else {
                     this.posts = []
                 }

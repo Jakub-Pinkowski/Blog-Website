@@ -3,13 +3,13 @@
         <div class="post_gallery">
             <div class="post" v-for="post in posts" :key="post.id">
                 <img
-                    :src="post.details.image"
+                    :src="post.image"
                     alt=""
-                    @click="openModal(post.details.image)"
+                    @click="openModal(post.image)"
                 />
                 <div class="text">
-                    <h1>{{ post.details.title }}</h1>
-                    <div v-html="post.details.content"></div>
+                    <h1>{{ post.title }}</h1>
+                    <div v-html="post.content"></div>
                 </div>
             </div>
         </div>
