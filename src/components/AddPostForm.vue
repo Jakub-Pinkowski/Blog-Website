@@ -92,12 +92,6 @@ const authStore = useAuthStore()
 
 // FIXME: Fix form validation
 
-const isFormValid = computed(() => {
-    return (
-        newPost.value.title.trim() !== '' && newPost.value.content.trim() !== ''
-    )
-})
-
 // FIXME: Try to upload just a docx document and convert it to html
 
 // Drag and drop functionality
@@ -282,10 +276,7 @@ const addNewPost = async () => {
         }
 
         input {
-            width: 50%;
-        }
-
-        input {
+            width: 100%;
             padding: 0.5em;
             border: 1px solid var(--dark-accent);
             border-radius: 5px;
@@ -296,7 +287,8 @@ const addNewPost = async () => {
             justify-content: center;
             align-items: center;
             border: 2px dashed #ccc;
-            padding: 20px;
+            padding: 20px 200px;
+            margin-top: 1rem;
             text-align: center;
             cursor: pointer;
             transition: background 0.3s, border-color 0.3s, transform 0.3s;
