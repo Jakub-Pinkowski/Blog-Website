@@ -1,9 +1,21 @@
 <template>
     <div>
         <div class="post-detail" v-if="postFetched && post">
-            <img :src="post.image" alt="Post Image" />
+            <h3>
+                {{ post.date }}<span class="dot"> &bull;</span> Written by
+                {{ author }}
+            </h3>
             <h1>{{ post.title }}</h1>
+            <img :src="post.image" alt="Post Image" />
             <div v-html="post.content"></div>
+            <h3>
+                {{ author }}
+            </h3>
+            <div>
+                <router-link v-if="nextPost" :to="'/post/' + nextPost.id">
+                    {{ nextPost.title }}
+                </router-link>
+            </div>
         </div>
         <div v-else class="loading-message">
             <div class="loading-spinner"></div>
@@ -20,12 +32,33 @@ import { usePostStore } from '@/stores/posts'
 const route = useRoute()
 const postId = ref(route.params.id)
 
+const author = 'Iuliia Matiash'
+
 const postStore = usePostStore()
 const postFetched = ref(false)
 
 const post = computed(() =>
     postStore.posts.find((post) => post.id === postId.value)
 )
+
+// BUG: Fix the next post link
+const nextPost = computed(() => {
+    if (!post || !postFetched) {
+        return null
+    }
+
+    const currentPostIndex = postStore.posts.findIndex(
+        (p) => p.id === postId.value
+    )
+    if (
+        currentPostIndex === -1 ||
+        currentPostIndex === postStore.posts.length - 1
+    ) {
+        return null
+    }
+
+    return postStore.posts[currentPostIndex + 1]
+})
 
 // Fetch post data when component is mounted
 onMounted(async () => {
@@ -40,6 +73,12 @@ onMounted(async () => {
     flex-direction: column;
     align-items: center;
     margin-top: 5rem;
+
+    img {
+        width: 100%;
+        max-width: 800px;
+        margin-bottom: 2rem;
+    }
 }
 
 .loading-message {
