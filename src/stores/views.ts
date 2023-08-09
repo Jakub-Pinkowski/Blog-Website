@@ -5,9 +5,12 @@ export const useViewStore = defineStore({
     state: () => ({
         views: [
             {
+                name: 'Home',
+                route: '/',
+            },
+            {
                 name: 'About',
                 route: '/about',
-                description: 'Read more about me',
             },
         ],
     }),

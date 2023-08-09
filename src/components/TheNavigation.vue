@@ -6,9 +6,6 @@
             <span></span>
             <span></span>
             <ul id="menu">
-                <router-link to="/home">
-                    <li @click="close()">Home</li>
-                </router-link>
                 <router-link v-for="view in views" :to="view.route">
                     <li @click="close()">{{ view.name }}</li>
                 </router-link>

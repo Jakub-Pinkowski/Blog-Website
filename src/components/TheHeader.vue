@@ -6,9 +6,6 @@
             </router-link>
             <div class="collapse navbar-collapse navbarSupportedContent">
                 <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/">Home</router-link>
-                    </li>
                     <li v-for="view in views" class="nav-item">
                         <router-link class="nav-link" :to="view.route">{{
                             view.name
@@ -51,7 +48,7 @@ const views = viewStore.views
     justify-content: flex-end;
 
     li {
-        font-weight: 600;
+        font-weight: 400;
     }
 }
 </style>
