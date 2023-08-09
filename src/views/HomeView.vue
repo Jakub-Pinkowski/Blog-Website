@@ -1,6 +1,6 @@
 <template>
     <div class="view">
-        <h1>Blog</h1>
+        <h1 class="title">Blog</h1>
         <div class="post_columns">
             <div class="column">
                 <router-link
@@ -123,10 +123,26 @@ const oddPosts = computed(() =>
         transform: scale(1) !important;
     }
 
+    .title {
+        margin: 1rem 2rem;
+    }
+
+    .view {
+        margin: 0;
+    }
+
+    .post {
+        padding: 0 !important;
+    }
+
     .post_columns {
         flex-direction: column;
         gap: 0;
         margin: 2rem 0;
+
+        .read_more {
+            margin-bottom: 1rem !important;
+        }
     }
 }
 </style>
