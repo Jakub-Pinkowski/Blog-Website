@@ -9,7 +9,8 @@
             <img :src="post.image" alt="Post Image" />
             <div v-html="post.content" class="content"></div>
             <h3>
-                {{ author }}
+                {{ author }} <span class="dot"> &bull;</span>
+                {{ post.date }}
             </h3>
             <div class="links">
                 <router-link to="'/'">
@@ -118,6 +119,11 @@ onMounted(async () => {
             font-weight: 400;
             text-decoration: none;
             margin: 1rem 2rem;
+            transition: all 0.3s ease-out;
+        }
+
+        a:hover {
+            color: var(--accent-color);
         }
     }
 }

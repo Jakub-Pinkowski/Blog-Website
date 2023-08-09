@@ -29,6 +29,7 @@ const views = viewStore.views
     margin: 0.5rem 1.2rem;
     font-size: 1.2rem;
     color: var(--main-bg-color);
+    transition: all 0.3s ease-out;
 }
 
 .nav-link:hover {
@@ -36,7 +37,7 @@ const views = viewStore.views
 }
 
 .nav-link svg {
-    fill: var(--dark-accent); // This is the default color
+    fill: var(--dark-accent);
 }
 
 .nav-link:hover svg {
