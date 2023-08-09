@@ -122,5 +122,11 @@ const oddPosts = computed(() =>
         opacity: 1 !important;
         transform: scale(1) !important;
     }
+
+    .post_columns {
+        flex-direction: column;
+        gap: 0;
+        margin: 2rem 0;
+    }
 }
 </style>

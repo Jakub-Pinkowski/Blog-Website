@@ -95,6 +95,7 @@ onMounted(async () => {
         width: 100%;
         max-width: 800px;
         margin-bottom: 2rem;
+        border-radius: 5px;
     }
 
     .content {
@@ -127,7 +128,6 @@ onMounted(async () => {
         }
     }
 }
-
 .loading-message {
     display: flex;
     flex-direction: column;
