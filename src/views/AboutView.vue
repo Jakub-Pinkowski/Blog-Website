@@ -7,7 +7,7 @@
             </section>
             <section class="text">
                 <section>
-                    <h3>{{ about_title }}</h3>
+                    <h2>{{ about_title }}</h2>
                     <p>
                         {{ description }}
                     </p>

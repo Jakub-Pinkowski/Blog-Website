@@ -26,6 +26,7 @@
                         @dragleave.prevent="() => dragLeaveHandler(imageDrop)"
                     >
                         <span
+                            class="drag_message"
                             v-if="
                                 imageDrop.contentUrl.value !== null &&
                                 imageDrop.contentUrl.value !== undefined
@@ -33,10 +34,14 @@
                         >
                             {{ imageDrop.draggedFile.value?.name }}
                         </span>
-                        <span v-else-if="imageDrop.isProcessing.value">{{
-                            imageDrop.successMessage
+                        <span
+                            class="drag_message"
+                            v-else-if="imageDrop.isProcessing.value"
+                            >{{ imageDrop.successMessage }}</span
+                        >
+                        <span v-else>{{
+                            imageDrop.dropMessage
                         }}</span>
-                        <span v-else>{{ imageDrop.dropMessage }}</span>
                     </div>
                     <div
                         class="drag-drop-area"
@@ -52,6 +57,7 @@
                         @dragleave.prevent="() => dragLeaveHandler(htmlDrop)"
                     >
                         <span
+                            class="drag_message"
                             v-if="
                                 htmlDrop.contentUrl.value !== null &&
                                 htmlDrop.contentUrl.value !== undefined
@@ -59,10 +65,14 @@
                         >
                             {{ htmlDrop.draggedFile.value?.name }}
                         </span>
-                        <span v-else-if="htmlDrop.isProcessing.value">{{
-                            htmlDrop.successMessage
+                        <span
+                            class="drag_message"
+                            v-else-if="htmlDrop.isProcessing.value"
+                            >{{ htmlDrop.successMessage }}</span
+                        >
+                        <span v-else>{{
+                            htmlDrop.dropMessage
                         }}</span>
-                        <span v-else>{{ htmlDrop.dropMessage }}</span>
                     </div>
                     <button class="btn btn-sm" type="submit">Add Post</button>
                 </form>
@@ -325,6 +335,10 @@ const addNewPost = async () => {
                 font-weight: bold;
             }
         }
+    }
+
+    .drag_message {
+        background-color: #e8f5e9;
     }
 
     button {

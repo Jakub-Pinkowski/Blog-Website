@@ -44,12 +44,14 @@ import TheNavigation from '@/components/TheNavigation.vue'
 }
 
 /* Global styles */
+* {
+    background-color: var(--light-bg-color);
+}
 
 .body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--light-bg-color);
 }
 
 h1 {
