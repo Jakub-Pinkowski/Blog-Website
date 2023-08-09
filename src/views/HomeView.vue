@@ -18,16 +18,6 @@
                 </div>
             </router-link>
         </div>
-
-        <!-- Modal-->
-        <transition name="modal" mode="out-in" appear>
-            <div class="photo_modal" v-if="modalOpen">
-                <div class="modal-background" @click="closeModal"></div>
-                <div class="modal-content" @click="closeModal">
-                    <img :src="modalImage" alt="Full Size Image" />
-                </div>
-            </div>
-        </transition>
     </div>
 </template>
 
@@ -41,19 +31,6 @@ onMounted(async () => {
     await postStore.fetchPosts()
 })
 const posts = computed(() => postStore.posts)
-
-// Modal functionality
-const modalOpen = ref(false)
-const modalImage = ref('')
-
-const openModal = (imageSrc: string) => {
-    modalImage.value = imageSrc
-    modalOpen.value = true
-}
-
-const closeModal = () => {
-    modalOpen.value = false
-}
 </script>
 
 <style scoped lang="scss">
@@ -74,7 +51,6 @@ const closeModal = () => {
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 100vh;
 
         img {
             width: 70%;
@@ -98,6 +74,10 @@ const closeModal = () => {
             width: 70%;
             margin: 1rem;
 
+            h3 {
+                margin-top: 1.5rem;
+            }
+
             .read_more {
                 color: var(--dark-gray);
                 font-size: 1rem;
@@ -105,6 +85,7 @@ const closeModal = () => {
                 text-decoration: underline;
                 line-height: 1.5;
                 transition: all 0.3s ease-out;
+                margin-bottom: 3rem;
             }
         }
     }

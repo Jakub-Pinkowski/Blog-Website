@@ -49,7 +49,7 @@ import TheNavigation from '@/components/TheNavigation.vue'
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: white;
+    background-color: var(--light-bg-color);
 }
 
 h1 {
@@ -62,13 +62,13 @@ h1 {
 h2 {
     color: var(--dark-gray);
     font-size: 1.8rem;
-    font-weight: 400;
-    margin-bottom: 2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
 }
 
 h3 {
     color: var(--dark-gray);
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 400;
     margin-bottom: 1rem;
 }
