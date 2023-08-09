@@ -41,13 +41,14 @@ const close = () => {
     user-select: none;
 
     a {
+        background-color: var(--dark-gray);
         text-decoration: none;
-        color: #232323;
+        color: var(--dark-gray);
         transition: color 0.3s ease;
     }
 
     a:hover {
-        color: var(--highlight-color);
+        color: var(--dark-gray);
     }
 
     & > input {
@@ -66,7 +67,7 @@ const close = () => {
     & > input:checked ~ span {
         opacity: 1;
         transform: rotate(45deg) translate(-2px, -1px);
-        background: #232323;
+        background: var(--light-bg-color);
     }
 
     & > input:checked ~ span:nth-last-child(3) {
@@ -88,7 +89,7 @@ const close = () => {
         height: 4px;
         margin-bottom: 5px;
         position: relative;
-        background: var(--highlight-color);
+        background: var(--dark-gray);
         border-radius: 3px;
         z-index: 10000;
         transform-origin: 4px 0px;
@@ -112,7 +113,7 @@ const close = () => {
         padding: 50px;
         padding-top: 125px;
         height: 100vh;
-        background: #ededed;
+        background: var(--dark-gray);
         list-style-type: none;
         -webkit-font-smoothing: antialiased;
         transform: translateX(100%);
@@ -120,8 +121,11 @@ const close = () => {
         transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
 
         li {
+            color: var(--light-bg-color);
             padding: 10px 0;
             font-size: 22px;
+            font-weight: 500;
+            background-color: var(--dark-gray);
         }
     }
 }
