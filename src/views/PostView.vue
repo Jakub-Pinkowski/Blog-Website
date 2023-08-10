@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <section class="view_container">
+        <h1 class="title">Post</h1>
         <div class="post-detail" v-if="postFetched && post">
             <h3>
                 {{ post.date }}<span class="dot"> &bull;</span> Written by
@@ -8,10 +9,10 @@
             <h1>{{ post.title }}</h1>
             <img :src="post.image" alt="Post Image" />
             <div v-html="post.content" class="content"></div>
-            <h3>
+            <h4>
                 {{ author }} <span class="dot"> &bull;</span>
                 {{ post.date }}
-            </h3>
+            </h4>
             <div class="links">
                 <router-link to="'/'">
                     <span class="arrow-icon" v-html="leftArrowIcon" />Back to
@@ -27,7 +28,7 @@
             <div class="loading-spinner"></div>
             Loading...
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -85,74 +86,79 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
-.post-detail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 4rem;
-
-    img {
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 2rem;
-        border-radius: 5px;
+.view_container {
+    .title {
+        margin: 1rem 2rem;
     }
-
-    .content {
-        width: 100%;
-        max-width: 800px;
-        margin-bottom: 2rem;
-    }
-
-    .links {
+    .post-detail {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
+        flex-direction: column;
         align-items: center;
-        margin: 1rem;
-        width: 100%;
-        max-width: 800px;
+        margin-top: 4rem;
 
-        a {
-            display: block;
-            color: var(--dark-gray);
-            font-size: 1.5rem;
-            font-weight: 400;
-            text-decoration: none;
-            margin: 1rem 2rem;
-            transition: all 0.3s ease-out;
+        img {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            border-radius: 5px;
         }
 
-        a:hover {
-            color: var(--accent-color);
+        .content {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .links {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin: 1rem;
+            width: 100%;
+            max-width: 800px;
+
+            a {
+                display: block;
+                color: var(--dark-gray);
+                font-size: 1.5rem;
+                font-weight: 400;
+                text-decoration: none;
+                margin: 1rem 2rem;
+                transition: all 0.3s ease-out;
+
+                .arrow-icon {
+                    width: 20px;
+                    height: 20px;
+                    fill: var(--dark-gray);
+                    margin: 0 0.5rem;
+                }
+            }
+
+            a:hover {
+                color: var(--accent-color);
+            }
         }
     }
-}
-.loading-message {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-size: 1.2rem;
-    color: var(--dark-gray);
-}
+    .loading-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        font-size: 1.2rem;
+        color: var(--dark-gray);
 
-.loading-spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-left-color: var(--accent-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
-
-.arrow-icon {
-    width: 20px;
-    height: 20px;
-    fill: var(--dark-gray);
-    margin: 0 0.5rem;
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+    }
 }
 
 @keyframes spin {
@@ -161,6 +167,50 @@ onMounted(async () => {
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .view_container {
+        margin-top: 1rem;
+
+        .title {
+            margin-top: 2rem;
+            padding: 0;
+        }
+        .post-detail {
+            margin-top: 2rem;
+
+            h3 {
+                font-size: 1rem;
+            }
+
+            h1 {
+                margin: 1.5rem 0;
+                padding: 0;
+            }
+
+            img {
+                width: 90%;
+            }
+
+            .content {
+                width: 90%;
+                text-align: justify;
+                font-family: 'Montserrat', sans-serif;
+            }
+
+            .links {
+                margin: 0.5rem;
+
+                a {
+                    margin: 2rem 0.5rem;
+                    font-size: 1rem;
+                }
+            }
+        }
     }
 }
 </style>

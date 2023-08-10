@@ -39,9 +39,7 @@
                             v-else-if="imageDrop.isProcessing.value"
                             >{{ imageDrop.successMessage }}</span
                         >
-                        <span v-else>{{
-                            imageDrop.dropMessage
-                        }}</span>
+                        <span v-else>{{ imageDrop.dropMessage }}</span>
                     </div>
                     <div
                         class="drag-drop-area"
@@ -70,9 +68,7 @@
                             v-else-if="htmlDrop.isProcessing.value"
                             >{{ htmlDrop.successMessage }}</span
                         >
-                        <span v-else>{{
-                            htmlDrop.dropMessage
-                        }}</span>
+                        <span v-else>{{ htmlDrop.dropMessage }}</span>
                     </div>
                     <button class="btn btn-sm" type="submit">Add Post</button>
                 </form>
@@ -113,6 +109,9 @@ const imageDrop = {
     successMessage: 'Image is processing...',
     dropMessage: 'Drop an image here',
 }
+
+// TODO: Cosider chanching HTML to Markdown
+
 const htmlDrop = {
     isDragging: ref(false),
     isProcessing: ref(false),
