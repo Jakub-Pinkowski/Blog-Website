@@ -94,12 +94,20 @@ onMounted(async () => {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: 4rem;
+        margin-top: 2rem;
+
+        h3 {
+            margin: 0.7rem 0;
+        }
+
+        h1 {
+            margin: 0.7rem 0;
+        }
 
         img {
+            margin: 2rem 0;
             width: 100%;
             max-width: 800px;
-            margin-bottom: 2rem;
             border-radius: 5px;
         }
 
@@ -119,7 +127,8 @@ onMounted(async () => {
             max-width: 800px;
 
             a {
-                display: block;
+                display: flex; 
+                align-items: center;
                 color: var(--dark-gray);
                 font-size: 1.5rem;
                 font-weight: 400;
@@ -128,9 +137,6 @@ onMounted(async () => {
                 transition: all 0.3s ease-out;
 
                 .arrow-icon {
-                    width: 20px;
-                    height: 20px;
-                    fill: var(--dark-gray);
                     margin: 0 0.5rem;
                 }
             }
@@ -181,8 +187,6 @@ onMounted(async () => {
             padding: 0;
         }
         .post-detail {
-            margin-top: 2rem;
-
             h3 {
                 font-size: 1rem;
             }
