@@ -363,4 +363,18 @@ const addNewPost = async () => {
         color: var(--light-gray);
     }
 }
+
+/* Mobile */
+
+@media screen and (max-width: 768px) {
+    .admin_panel {
+
+        form {
+
+            .drag-drop-area{
+                padding: 20px 70px;
+            }
+        }
+    }
+}
 </style>
