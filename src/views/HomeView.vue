@@ -1,5 +1,5 @@
 <template>
-    <div class="view">
+    <section class="view_container">
         <h1 class="title">Blog</h1>
         <div class="post_columns">
             <div class="column">
@@ -11,7 +11,7 @@
                 >
                     <img :src="post.image" alt="" />
                     <div class="text">
-                        <h3>{{ post.date }}</h3>
+                        <h4>{{ post.date }}</h4>
                         <h2>{{ post.title }}</h2>
                         <span class="read_more">Read More</span>
                     </div>
@@ -26,14 +26,14 @@
                 >
                     <img :src="post.image" alt="" />
                     <div class="text">
-                        <h3>{{ post.date }}</h3>
+                        <h4>{{ post.date }}</h4>
                         <h2>{{ post.title }}</h2>
                         <span class="read_more">Read More</span>
                     </div>
                 </router-link>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -56,60 +56,65 @@ const oddPosts = computed(() =>
 </script>
 
 <style scoped lang="scss">
-.post_columns {
-    display: flex;
-    gap: 1rem;
-    margin: 2rem;
-
-    .column {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+.view_container {
+    .title {
+        margin: 1rem 2rem;
     }
-
-    .post {
-        text-decoration: none;
-        color: inherit;
-        padding: 1rem;
+    .post_columns {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        gap: 1rem;
+        margin: 2rem;
 
-        img {
-            width: 90%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 5px;
-            transition: all 0.5s ease-out;
-        }
-
-        img:hover {
-            opacity: 0.95;
-            transform: scale(1.05);
-            cursor: pointer;
-        }
-
-        .text {
+        .column {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 70%;
-            margin: 1rem;
+            gap: 1rem;
+        }
 
-            h3 {
-                margin-top: 1.5rem;
+        .post {
+            text-decoration: none;
+            color: inherit;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            img {
+                width: 90%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 5px;
+                transition: all 0.5s ease-out;
             }
 
-            .read_more {
-                color: var(--dark-gray);
-                font-size: 1rem;
-                font-weight: 500;
-                text-decoration: underline;
-                line-height: 1.5;
-                transition: all 0.3s ease-out;
-                margin-bottom: 3rem;
+            img:hover {
+                opacity: 0.95;
+                transform: scale(1.05);
+            }
+
+            .text {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 70%;
+                margin: 1rem;
+
+                h4 {
+                    margin: 0.7rem 0;
+                }
+
+                h2 {
+                    margin: 0.7rem 0;
+                }
+
+                .read_more {
+                    margin: 0.7rem 0;
+                    font-weight: 400;
+                    text-decoration: underline;
+                    line-height: 1.5;
+                }
             }
         }
     }
@@ -118,30 +123,39 @@ const oddPosts = computed(() =>
 /* Mobile */
 
 @media screen and (max-width: 768px) {
-    img:hover {
-        opacity: 1 !important;
-        transform: scale(1) !important;
-    }
+    .view_container {
+        margin-top: 1rem;
 
-    .title {
-        margin: 1rem 2rem;
-    }
+        .title {
+            margin-top: 2rem;
+            margin-bottom: 0;
+        }
+        .post_columns {
+            flex-direction: column;
+            gap: 0;
+            margin: 3rem 0;
 
-    .view {
-        margin: 1rem 0rem;
-    }
+            .post {
+                padding: 0 !important;
 
-    .post {
-        padding: 0 !important;
-    }
+                img:hover {
+                    opacity: 1 !important;
+                    transform: scale(1) !important;
+                }
 
-    .post_columns {
-        flex-direction: column;
-        gap: 0;
-        margin: 3rem 0;
+                .text {
+                    h4 {
+                        margin: 0.5rem 0;
+                    }
 
-        .read_more {
-            margin-bottom: 1rem !important;
+                    h2 {
+                        margin: 0.5rem 0;
+                    }
+                    .read_more {
+                        margin-bottom: 0.7rem;
+                    }
+                }
+            }
         }
     }
 }

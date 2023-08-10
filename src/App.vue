@@ -37,10 +37,6 @@ import TheNavigation from '@/components/TheNavigation.vue'
     .mobile {
         display: block;
     }
-
-    h1 {
-        margin-top: 3rem;
-    }
 }
 
 /* Global styles */
@@ -86,8 +82,10 @@ p {
     font-weight: 300;
 }
 
-.view {
-    margin: 1rem 2rem;
+span {
+    color: var(--dark-gray);
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 /* Transition between views */

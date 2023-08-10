@@ -1,5 +1,5 @@
 <template>
-    <section id="about" class="view_container">
+    <section class="view_container">
         <h1 class="title">About</h1>
         <div class="about-description">
             <section class="photo">
@@ -83,11 +83,10 @@ const description =
 
         .title {
             margin-top: 2rem;
-            margin-bottom: 0;
         }
 
         .about-description {
-            margin-top: 2rem;
+            margin-top: 3rem;
             flex-direction: column;
             justify-content: center;
             align-items: center;
