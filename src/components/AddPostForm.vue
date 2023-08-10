@@ -368,10 +368,8 @@ const addNewPost = async () => {
 
 @media screen and (max-width: 768px) {
     .admin_panel {
-
         form {
-
-            .drag-drop-area{
+            .drag-drop-area {
                 padding: 20px 70px;
             }
         }

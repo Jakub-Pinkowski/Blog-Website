@@ -1,6 +1,7 @@
 <template>
     <section class="view_container">
         <h1 class="title">Blog</h1>
+        <h2 class="description">{{ description }}</h2>
         <div class="post_columns">
             <div class="column">
                 <router-link
@@ -40,6 +41,8 @@
 import { onMounted, computed } from 'vue'
 import { usePostStore } from '@/stores/posts'
 
+const description = 'Travel is love, travel is life.'
+
 const postStore = usePostStore()
 
 onMounted(async () => {
@@ -59,6 +62,11 @@ const oddPosts = computed(() =>
 .view_container {
     .title {
         margin: 1rem 2rem;
+    }
+
+    .description {
+        margin: 1rem 2rem;
+        font-weight: 400;
     }
     .post_columns {
         display: flex;

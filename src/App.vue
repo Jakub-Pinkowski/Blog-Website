@@ -41,8 +41,10 @@ import TheNavigation from '@/components/TheNavigation.vue'
 
 /* Global styles */
 
-// FIXME: Get rid of this or standarize it
-* {
+// TODO: Make safati recognize the background-color
+*,
+html,
+main {
     background-color: var(--light-bg-color);
 }
 
@@ -50,6 +52,7 @@ import TheNavigation from '@/components/TheNavigation.vue'
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: var(--light-bg-color);
 }
 
 h1 {
