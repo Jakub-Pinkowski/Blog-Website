@@ -34,4 +34,16 @@ onMounted(() => {
         margin: 1rem 2rem;
     }
 }
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .view_container {
+        margin-top: 1rem;
+
+        .title {
+            margin-top: 2rem;
+        }
+    }
+}
 </style>
