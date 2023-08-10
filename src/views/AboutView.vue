@@ -11,6 +11,15 @@
                     <p>
                         {{ description }}
                     </p>
+                    <p>
+                        {{ other_site }}
+                        <a
+                            href="https://jules-art.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            >{{ jules_art }}</a
+                        >
+                    </p>
                 </section>
                 <ContactForm />
             </section>
@@ -26,11 +35,15 @@ import ContactForm from '../components/ContactForm.vue'
 
 const about_title =
     // TODO: Change the title
-    'Artistic soul. Berlin.'
+    'Lorem ipsum dolor sit amet'
 
 const description =
     // TODO: Change the description
-    "Photography is my passion and I would like to share my best work here. I am interested in traveling, aesthetics, and fashion photography. Recently, I've started diving into videography and I hope to share my first work soon. I will be happy to work on interesting projects and welcome all creative souls to reach out to me via social platforms or the form below."
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nisl sed aliquam ultricies, nunc nisl aliquet nunc, vitae aliquam nisl nunc sed nisl. Donec euismod, nisl sed aliquam ultricies, nunc nisl aliquet nunc, vitae aliquam nisl nunc sed nisl.'
+
+const other_site = 'Checkout my other work at '
+
+const jules_art = 'Jules-Art.com'
 </script>
 
 <style scoped lang="scss">
