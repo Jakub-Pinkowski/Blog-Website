@@ -23,12 +23,18 @@ const email = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
+    let errorObj: Error | null = null
+
     try {
         await authStore.login(email.value, password.value)
         email.value = ''
         password.value = ''
-    } catch (error) {
-        alert('Failed to login: ' + error.message)
+    } catch (e) {
+        errorObj = e as Error // Assign the error object to the variable
+    }
+
+    if (errorObj) {
+        alert('Failed to login: ' + errorObj.message)
     }
 }
 </script>
@@ -61,6 +67,14 @@ form {
     button:hover {
         border: 1px solid var(--dark-accent);
         background-color: var(--light-accent);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    form {
+        input {
+            width: 90%;
+        }
     }
 }
 </style>

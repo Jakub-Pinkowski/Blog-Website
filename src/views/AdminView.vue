@@ -1,6 +1,6 @@
 <template>
-    <div class="view">
-        <ViewDescription>Admin</ViewDescription>
+    <section class="view_container">
+        <h1 class="title">Admin</h1>
         <!-- When logged in -->
         <div v-if="authStore.user">
             <AddPostForm />
@@ -9,7 +9,7 @@
         <div v-else>
             <LoginForm />
         </div>
-    </div>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -28,4 +28,10 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.view_container {
+    .title {
+        margin: 1rem 2rem;
+    }
+}
+</style>
