@@ -44,6 +44,8 @@ import TheNavigation from '@/components/TheNavigation.vue'
 }
 
 /* Global styles */
+
+// FIXME: Get rid of this or standarize it
 * {
     background-color: var(--light-bg-color);
 }
@@ -58,28 +60,30 @@ h1 {
     color: var(--dark-gray);
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 1rem;
 }
 
 h2 {
     color: var(--dark-gray);
     font-size: 1.8rem;
     font-weight: 500;
-    margin-bottom: 1rem;
 }
 
 h3 {
     color: var(--dark-gray);
-    font-size: 1rem;
+    font-size: 1.5rem;
     font-weight: 400;
-    margin-bottom: 1rem;
+}
+
+h4 {
+    color: var(--dark-gray);
+    font-size: 1.2rem;
+    font-weight: 400;
 }
 
 p {
     color: var(--dark-gray);
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 300;
-    margin-bottom: 2rem;
 }
 
 .view {

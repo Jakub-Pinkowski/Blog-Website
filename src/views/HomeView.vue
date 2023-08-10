@@ -128,7 +128,7 @@ const oddPosts = computed(() =>
     }
 
     .view {
-        margin: 0;
+        margin: 1rem 0rem;
     }
 
     .post {
@@ -138,7 +138,7 @@ const oddPosts = computed(() =>
     .post_columns {
         flex-direction: column;
         gap: 0;
-        margin: 2rem 0;
+        margin: 3rem 0;
 
         .read_more {
             margin-bottom: 1rem !important;

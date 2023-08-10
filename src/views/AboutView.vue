@@ -1,6 +1,6 @@
 <template>
-    <section id="about" class="view">
-        <h1>About</h1>
+    <section id="about" class="view_container">
+        <h1 class="title">About</h1>
         <div class="about-description">
             <section class="photo">
                 <img :src="about_photo" alt="artist-photo" />
@@ -34,7 +34,10 @@ const description =
 </script>
 
 <style scoped lang="scss">
-#about {
+.view_container {
+    .title {
+        margin: 1rem 2rem;
+    }
     .about-description {
         margin-top: 5rem;
         display: flex;
@@ -64,20 +67,46 @@ const description =
         width: 50%;
         text-align: justify;
         text-justify: inter-word;
-    }
 
-    @media screen and (max-width: 768px) {
+        p {
+            margin: 2rem 0;
+            font-size: 1.2rem;
+        }
+    }
+}
+
+/* Mobile */
+
+@media screen and (max-width: 768px) {
+    .view_container {
+        margin-top: 1rem;
+
+        .title {
+            margin-top: 2rem;
+            margin-bottom: 0;
+        }
+
         .about-description {
+            margin-top: 2rem;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
 
         .photo {
             width: 100%;
             margin-bottom: 3rem;
+
+            img {
+                width: 90%;
+                height: auto;
+            }
         }
 
         .text {
-            width: 100%;
+            justify-content: center;
+            width: 90%;
             margin: 0 2rem;
         }
     }
