@@ -4,29 +4,27 @@ import {
     onAuthStateChanged,
     signInWithEmailAndPassword,
 } from 'firebase/auth'
-import firebase from 'firebase/compat/app' // Import this for the types
+import type { User as FirebaseUser } from 'firebase/auth'
 
 const auth = getAuth()
 
 export const useAuthStore = defineStore({
     id: 'authStore',
     state: () => ({
-        user: null as firebase.User | null, // Use this type for user
+        user: null as FirebaseUser | null,
         error: null as string | null,
     }),
     actions: {
-        // Initialize auth state listener
         initAuth() {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
-                    this.user = user
+                    this.user = user as FirebaseUser
                 } else {
                     this.user = null
                 }
             })
         },
 
-        // Sign in with email and password
         async login(email: string, password: string) {
             try {
                 const userCredential = await signInWithEmailAndPassword(
@@ -34,19 +32,18 @@ export const useAuthStore = defineStore({
                     email,
                     password
                 )
-                this.user = userCredential.user
+                this.user = userCredential.user as FirebaseUser
             } catch (error) {
-                this.error = error.message
+                this.error = (error as { message: string }).message
             }
         },
 
-        // Log out
         async logout() {
             try {
                 await auth.signOut()
                 this.user = null
             } catch (error) {
-                this.error = error.message
+                this.error = (error as { message: string }).message
             }
         },
     },
