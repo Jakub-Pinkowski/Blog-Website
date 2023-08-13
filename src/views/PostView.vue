@@ -39,7 +39,7 @@ import { usePostStore } from '@/stores/posts'
 const route = useRoute()
 const postId = ref(route.params.id)
 
-const author = 'Iuliia Matiash'
+const author = 'Author'
 
 const postStore = usePostStore()
 const postFetched = ref(false)

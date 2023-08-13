@@ -21,7 +21,6 @@
                         >
                     </p>
                 </section>
-                <ContactForm />
             </section>
         </div>
     </section>
