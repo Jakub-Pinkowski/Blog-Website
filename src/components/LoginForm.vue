@@ -22,6 +22,7 @@ const authStore = useAuthStore()
 const email = ref('')
 const password = ref('')
 
+// FIXME: Alert the user if the login was unsuccessful
 const handleLogin = async () => {
     let errorObj: Error | null = null
 
